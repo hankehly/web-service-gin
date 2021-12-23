@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"net/http"
 
@@ -21,11 +22,14 @@ var albums = []album{
 }
 
 func main() {
+	port := flag.String("port", "8080", "Run webserver on this port")
+	flag.Parse()
 	router := gin.Default()
 	router.GET("/albums", getAlbums)
 	router.POST("/albums", postAlbums)
 	router.GET("/albums/:id", getAlbum)
-	router.Run("localhost:8080")
+	addr := fmt.Sprintf("0.0.0.0:%s", *port)
+	router.Run(addr)
 }
 
 func getAlbums(c *gin.Context) {
